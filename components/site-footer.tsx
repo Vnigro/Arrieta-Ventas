@@ -68,7 +68,7 @@ export function SiteFooter() {
                 <WhatsAppIcon className="size-4" />
               </a>
               <a
-                href="#https://www.instagram.com/melisaaaaj/"
+                href="https://www.instagram.com/melisaaaaj/"
                 aria-label="Instagram"
                 className="flex size-9 items-center justify-center rounded-lg border border-border text-foreground transition-colors hover:bg-muted"
               >
