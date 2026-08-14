@@ -135,7 +135,7 @@ const filtered = useMemo(() => {
                 onValueChange={(v) => setStatus(v as StatusFilter)}
               >
                 <SelectTrigger className="h-10 flex-1 sm:w-40" aria-label="Filtrar por estado">
-                  <SelectValue>{() => STATUS_LABELS[status]}</SelectValue>
+                  <SelectValue>{STATUS_LABELS[status]}</SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="todos">Todos</SelectItem>
@@ -149,7 +149,7 @@ const filtered = useMemo(() => {
                 onValueChange={(v) => setSort(v as SortOrder)}
               >
                 <SelectTrigger className="h-10 flex-1 sm:w-48" aria-label="Ordenar por">
-                  <SelectValue>{() => SORT_LABELS[sort]}</SelectValue>
+                  <SelectValue>{SORT_LABELS[sort]}</SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="destacados">Destacados</SelectItem>

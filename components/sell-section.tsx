@@ -65,7 +65,7 @@ export function SellSection() {
 
           <div className="mt-8">
             <Button
-              className="h-12 gap-2 bg-[#25D366] px-6 text-base text-white hover:bg-[#20bd5a]"
+              className="h-auto min-h-12 w-full sm:w-auto gap-2 bg-[#25D366] px-4 sm:px-6 py-3 text-sm sm:text-base text-white hover:bg-[#20bd5a] whitespace-normal leading-snug text-center"
               render={
                 <a
                   href={buildSellWhatsAppLink()}
@@ -74,8 +74,8 @@ export function SellSection() {
                 />
               }
             >
-              <WhatsAppIcon className="size-5" />
-              Enviar datos de mi vehículo por WhatsApp
+              <WhatsAppIcon className="size-5 shrink-0" />
+              <span>Enviar datos de mi vehículo por WhatsApp</span>
             </Button>
           </div>
         </div>
