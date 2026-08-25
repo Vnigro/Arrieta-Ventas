@@ -32,6 +32,7 @@ export function VehicleCard({
         <img
           src={vehicle.images[0] || "/placeholder.svg"}
           alt={`${vehicle.title} ${vehicle.year}`}
+          style={{ objectPosition: vehicle.imagePosition }}
           className={cn(
             "size-full object-cover transition-transform duration-300 group-hover:scale-105",
             sold && "opacity-60 grayscale",
@@ -42,9 +43,7 @@ export function VehicleCard({
           {sold ? (
             <Badge className="bg-foreground/85 text-background">VENDIDA</Badge>
           ) : (
-            <Badge className="bg-success text-success-foreground">
-              Disponible
-            </Badge>
+            <Badge className="bg-success text-success-foreground">Disponible</Badge>
           )}
         </div>
         <div className="absolute right-3 top-3">
@@ -52,6 +51,11 @@ export function VehicleCard({
             {vehicle.category}
           </Badge>
         </div>
+        {vehicle.images.length > 1 && (
+          <div className="absolute bottom-3 right-3 rounded-full bg-background/90 px-2.5 py-1 text-[11px] font-semibold text-foreground shadow">
+            +{vehicle.images.length - 1} fotos
+          </div>
+        )}
       </button>
 
       <div className="flex flex-1 flex-col p-4">
