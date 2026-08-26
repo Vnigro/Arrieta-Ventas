@@ -18,7 +18,7 @@ export function HeroSection() {
         </span>
 
         <h1 className="mt-5 max-w-3xl text-balance text-4xl font-extrabold leading-[1.05] tracking-tight text-foreground sm:text-5xl md:text-6xl">
-          Encontrá tu próxima moto o vendé la tuya{" "}
+          Encontrá tu próximo vehiculo o vendé el tuyo{" "}
           <span className="text-brand">en el acto.</span>
         </h1>
 

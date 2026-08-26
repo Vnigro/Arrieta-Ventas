@@ -18,7 +18,7 @@ export function SiteHeader() {
           aria-label="MEL ARRIETA Motos & Autos, inicio"
         >
           <span className="text-xl font-extrabold tracking-tight text-foreground">
-            MEL ARRIETA
+            ARRIETA AUTOMOTORES
           </span>
           <span className="text-[10px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
             Motos &amp; Autos · Compra y Venta

@@ -9,7 +9,7 @@ export function SiteFooter() {
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
           <div>
             <span className="text-lg font-extrabold tracking-tight text-foreground">
-              MEL ARRIETA
+              ARRIETA AUTOMOTORES
             </span>
             <p className="mt-1 text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
               Motos &amp; Autos
@@ -86,7 +86,7 @@ export function SiteFooter() {
         </div>
 
         <div className="mt-10 border-t border-border pt-6 text-center text-xs text-muted-foreground">
-          © {new Date().getFullYear()} MEL ARRIETA Motos &amp; Autos. Todos los
+          © {new Date().getFullYear()}ARRIETA AUTOMOTORES &amp; Autos. Todos los
           derechos reservados.
         </div>
       </div>
