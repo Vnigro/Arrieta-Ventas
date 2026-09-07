@@ -1,12 +1,13 @@
-import { v2 as cloudinary } from "cloudinary";
-
-// Saneamos CLOUDINARY_URL por si llegó con espacios, saltos de línea o
-// comillas colgadas desde el panel de variables de entorno (Vercel u otro).
-// La librería de cloudinary exige que el string empiece EXACTO con
-// "cloudinary://", así que cualquier caracter invisible de más la rompe.
+// IMPORTANTE: el paquete "cloudinary" ejecuta su propio config() apenas se
+// importa (ver cloudinary/lib/utils/index.js -> ensureOption.defaults(config())).
+// Si CLOUDINARY_URL viene con espacios/comillas/caracteres invisibles, ese
+// import explota ANTES de que cualquier código nuestro llegue a correr.
+// Por eso saneamos la variable primero y recién después hacemos el import
+// (dinámico, para que se ejecute después de la limpieza).
 if (process.env.CLOUDINARY_URL) {
-  const cleaned = process.env.CLOUDINARY_URL.trim().replace(/^['"]+|['"]+$/g, "").trim();
-  if (cleaned !== process.env.CLOUDINARY_URL) {
+  const original = process.env.CLOUDINARY_URL;
+  const cleaned = original.trim().replace(/^['"]+|['"]+$/g, "").trim();
+  if (cleaned !== original) {
     console.warn("[Cloudinary] CLOUDINARY_URL tenía espacios o comillas de más; se limpió automáticamente.");
   }
   process.env.CLOUDINARY_URL = cleaned;
@@ -15,10 +16,19 @@ if (process.env.CLOUDINARY_URL) {
 if (!process.env.CLOUDINARY_URL) {
   console.warn("[Cloudinary] CLOUDINARY_URL no está definida. La subida de imágenes va a fallar.");
 } else if (!process.env.CLOUDINARY_URL.toLowerCase().startsWith("cloudinary://")) {
+  // Logueamos en HEX para descubrir cualquier caracter invisible (espacio,
+  // salto de línea, BOM, etc.) que no se vea en el dashboard de Vercel.
+  const preview = process.env.CLOUDINARY_URL.slice(0, 20);
+  const hex = Buffer.from(preview, "utf8").toString("hex");
   console.error(
-    `[Cloudinary] CLOUDINARY_URL no empieza con "cloudinary://" (empieza con: "${process.env.CLOUDINARY_URL.slice(0, 15)}..."). Revisá la variable en Vercel.`
+    `[Cloudinary] CLOUDINARY_URL sigue sin empezar con "cloudinary://" después de limpiar.\n` +
+      `  Primeros 20 caracteres: "${preview}"\n` +
+      `  En hex: ${hex}\n` +
+      `  Longitud total del valor: ${process.env.CLOUDINARY_URL.length}`
   );
 }
+
+const { v2: cloudinary } = await import("cloudinary");
 
 // Configurar Cloudinary usando la variable CLOUDINARY_URL del .env
 cloudinary.config();
