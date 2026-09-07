@@ -1,5 +1,25 @@
 import { v2 as cloudinary } from "cloudinary";
 
+// Saneamos CLOUDINARY_URL por si llegó con espacios, saltos de línea o
+// comillas colgadas desde el panel de variables de entorno (Vercel u otro).
+// La librería de cloudinary exige que el string empiece EXACTO con
+// "cloudinary://", así que cualquier caracter invisible de más la rompe.
+if (process.env.CLOUDINARY_URL) {
+  const cleaned = process.env.CLOUDINARY_URL.trim().replace(/^['"]+|['"]+$/g, "").trim();
+  if (cleaned !== process.env.CLOUDINARY_URL) {
+    console.warn("[Cloudinary] CLOUDINARY_URL tenía espacios o comillas de más; se limpió automáticamente.");
+  }
+  process.env.CLOUDINARY_URL = cleaned;
+}
+
+if (!process.env.CLOUDINARY_URL) {
+  console.warn("[Cloudinary] CLOUDINARY_URL no está definida. La subida de imágenes va a fallar.");
+} else if (!process.env.CLOUDINARY_URL.toLowerCase().startsWith("cloudinary://")) {
+  console.error(
+    `[Cloudinary] CLOUDINARY_URL no empieza con "cloudinary://" (empieza con: "${process.env.CLOUDINARY_URL.slice(0, 15)}..."). Revisá la variable en Vercel.`
+  );
+}
+
 // Configurar Cloudinary usando la variable CLOUDINARY_URL del .env
 cloudinary.config();
 
