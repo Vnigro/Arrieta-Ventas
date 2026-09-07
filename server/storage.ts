@@ -6,9 +6,12 @@
 // (dinámico, para que se ejecute después de la limpieza).
 if (process.env.CLOUDINARY_URL) {
   const original = process.env.CLOUDINARY_URL;
-  const cleaned = original.trim().replace(/^['"]+|['"]+$/g, "").trim();
+  let cleaned = original.trim().replace(/^['"]+|['"]+$/g, "").trim();
+  // Si por error se pegó "CLOUDINARY_URL=cloudinary://..." como valor
+  // (copiando la línea entera de un .env), sacamos ese prefijo también.
+  cleaned = cleaned.replace(/^CLOUDINARY_URL\s*=\s*/i, "");
   if (cleaned !== original) {
-    console.warn("[Cloudinary] CLOUDINARY_URL tenía espacios o comillas de más; se limpió automáticamente.");
+    console.warn("[Cloudinary] CLOUDINARY_URL tenía espacios, comillas o el prefijo 'CLOUDINARY_URL=' de más; se limpió automáticamente.");
   }
   process.env.CLOUDINARY_URL = cleaned;
 }
