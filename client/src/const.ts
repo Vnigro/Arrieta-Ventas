@@ -6,30 +6,38 @@ export const startLogin = () => {
   const oauthPortalUrl = import.meta.env.VITE_OAUTH_PORTAL_URL;
   const appId = import.meta.env.VITE_APP_ID;
 
-  if (!oauthPortalUrl || !appId) {
-    alert("Faltan variables VITE_OAUTH_PORTAL_URL o VITE_APP_ID en el archivo .env");
+  // Atrapa tanto si es undefined real como si Vite lo inyectó como el string "undefined"
+  const isInvalidUrl = !oauthPortalUrl || oauthPortalUrl === "undefined";
+  const isInvalidApp = !appId || appId === "undefined";
+
+  if (isInvalidUrl || isInvalidApp) {
+    alert("Faltan configurar las variables VITE_OAUTH_PORTAL_URL o VITE_APP_ID en el panel de Vercel.");
     return;
   }
 
-  const redirectUri = `${window.location.origin}/api/oauth/callback`;
-  const nonce = crypto.randomUUID();
+  try {
+    const redirectUri = `${window.location.origin}/api/oauth/callback`;
+    const nonce = crypto.randomUUID();
 
-  const isSecure = window.location.protocol === "https:";
-  
-  // 🔑 En localhost (HTTP) usamos "oauth_state" sin "__Host-" para que el navegador no lo bloquee
-  const cookieName = isSecure ? OAUTH_STATE_COOKIE : "oauth_state";
-  const sameSite = isSecure ? "None" : "Lax";
-  const secureFlag = isSecure ? "; Secure" : "";
+    const isSecure = window.location.protocol === "https:";
+    const cookieName = isSecure ? OAUTH_STATE_COOKIE : "oauth_state";
+    const sameSite = isSecure ? "None" : "Lax";
+    const secureFlag = isSecure ? "; Secure" : "";
 
-  document.cookie = `${cookieName}=${nonce}; Path=/; Max-Age=600; SameSite=${sameSite}${secureFlag}`;
+    document.cookie = `${cookieName}=${nonce}; Path=/; Max-Age=600; SameSite=${sameSite}${secureFlag}`;
 
-  const state = encodeOAuthState({ redirectUri, nonce });
+    const state = encodeOAuthState({ redirectUri, nonce });
 
-  const url = new URL(`${oauthPortalUrl.replace(/\/$/, "")}/app-auth`);
-  url.searchParams.set("appId", appId);
-  url.searchParams.set("redirectUri", redirectUri);
-  url.searchParams.set("state", state);
-  url.searchParams.set("type", "signIn");
+    const baseUrl = oauthPortalUrl.replace(/\/$/, "");
+    const url = new URL(`${baseUrl}/app-auth`);
+    url.searchParams.set("appId", appId);
+    url.searchParams.set("redirectUri", redirectUri);
+    url.searchParams.set("state", state);
+    url.searchParams.set("type", "signIn");
 
-  window.location.href = url.toString();
+    window.location.href = url.toString();
+  } catch (error) {
+    console.error("Error iniciando sesión:", error);
+    alert("La URL de autenticación no es válida. Revisa las variables en Vercel.");
+  }
 };
