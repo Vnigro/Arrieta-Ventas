@@ -70,17 +70,26 @@
 
 * {
   border-color: var(--border);
+  box-sizing: border-box;
 }
 html {
   scroll-behavior: smooth;
   background: #151515;
+  overflow-x: hidden;
 }
 body {
   margin: 0;
   min-width: 320px;
+  max-width: 100%;
+  overflow-x: hidden;
   background: var(--background);
   color: var(--foreground);
   font-family: "DM Sans", sans-serif;
+}
+#root {
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 button,
 input,
@@ -121,7 +130,7 @@ button {
   }
 }
 .site-shell {
-  /* overflow: hidden; */
+  overflow-x: hidden;
   background: #f6f1e9;
   color: #151515;
 }
@@ -2855,10 +2864,21 @@ textarea:focus {
     padding-top: 2rem !important;
     padding-bottom: 2.5rem !important;
     min-height: auto !important;
+    width: 100%;
+    max-width: 100%;
   }
 
   .hero-grid {
+    width: 100%;
+    max-width: 100%;
     gap: 1.5rem !important;
+  }
+
+  .hero-copy,
+  .hero-copy h1,
+  .hero-description {
+    min-width: 0;
+    max-width: 100%;
   }
 
   /* Ajustamos el margen inferior para que la barra quede equilibrada */

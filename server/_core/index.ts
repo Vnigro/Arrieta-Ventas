@@ -35,6 +35,11 @@ async function startServer() {
     const { serveStatic } = await import("./vite.js");
     serveStatic(app);
   }
+
+  const port = Number(process.env.PORT ?? 3000);
+  server.listen(port, "0.0.0.0", () => {
+    console.log(`[Server] Listening on http://localhost:${port}` );
+  });
 }
 
 if (process.env.NODE_ENV === "development") {
