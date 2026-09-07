@@ -9,7 +9,20 @@ let _db: ReturnType<typeof drizzle> | null = null;
 export async function getDb() {
   if (!_db && process.env.DATABASE_URL) {
     try {
-      _db = drizzle(process.env.DATABASE_URL);
+      // TiDB Cloud Serverless (y muchos proveedores mysql "serverless" como
+      // PlanetScale) EXIGEN conexión SSL/TLS. Pasarle solo el connection
+      // string a mysql2 no activa SSL automáticamente, y la conexión se
+      // rechaza con "Connections using insecure transport are prohibited".
+      // Por eso armamos el pool explícitamente con ssl habilitado.
+      _db = drizzle({
+        connection: {
+          uri: process.env.DATABASE_URL,
+          ssl: {
+            minVersion: "TLSv1.2",
+            rejectUnauthorized: true,
+          },
+        },
+      });
     } catch (error) {
       console.warn("[Database] Failed to connect:", error);
       _db = null;
@@ -17,6 +30,7 @@ export async function getDb() {
   }
   return _db;
 }
+
 
 export async function upsertUser(user: typeof import("../drizzle/schema").users.$inferInsert): Promise<void> {
   if (!user.openId) throw new Error("User openId is required for upsert");
