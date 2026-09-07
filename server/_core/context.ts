@@ -43,3 +43,4 @@ export async function createContext({ req, res }: CreateExpressContextOptions) {
     return { req, res, user: null };
   }
 }
+export type TrpcContext = Awaited<ReturnType<typeof createContext>>;
